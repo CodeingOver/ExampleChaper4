@@ -1,7 +1,7 @@
 ﻿@{
-    ViewBag.Title = "Admin Home";
+    ViewBag.Title = ExampleChaper4.Resources.Site.Admin_Title;
     Layout = "~/Views/Shared/_Layout.cshtml"; // tái dùng layout chung
 }
-<h2>Khu vực Admin</h2>
-<p>Đây là trang Index của Area Admin.</p>
-<p>@Html.ActionLink("Về trang chủ", "Index", "Home", new { area = "" }, null)</p>
+<h2>@ExampleChaper4.Resources.Site.Admin_Title</h2>
+<p>@ExampleChaper4.Resources.Site.Admin_Welcome</p>
+<p>@Html.ActionLink(ExampleChaper4.Resources.Site.Admin_BackToHome, "Index", "Home", new { area = "" }, null)</p>

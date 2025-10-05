@@ -12,11 +12,11 @@
     <header class="navbar navbar-inverse">
         <div class="container">
             <a class="navbar-brand" href="@Url.Action("Index","Home", new { area = "" })">ExampleChaper4</a>
-            @* Menu tĩnh đơn giản *@
+            @* Menu với Resources cho VI/EN *@
             <nav style="display:inline-block; margin-left:20px">
                 <ul class="nav navbar-nav">
-                    <li><a href="@Url.Action("Index","Home", new { area = "" })">Home</a></li>
-                    <li><a href="@Url.Action("About","Home", new { area = "" })">About</a></li>
+                    <li><a href="@Url.Action("Index","Home", new { area = "" })">@ExampleChaper4.Resources.Site.Menu_Home</a></li>
+                    <li><a href="@Url.Action("About","Home", new { area = "" })">@ExampleChaper4.Resources.Site.Menu_About</a></li>
                 </ul>
             </nav>
             @* Panel đăng nhập đơn giản (Partial tĩnh) *@
