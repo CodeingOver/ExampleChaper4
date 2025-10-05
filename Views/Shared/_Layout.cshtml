@@ -1,0 +1,46 @@
+﻿@* Khung giao diện dùng chung *@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@(ViewBag.Title ?? "ExampleChaper4") - ExampleChaper4</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <header class="navbar navbar-inverse">
+        <div class="container">
+            <a class="navbar-brand" href="@Url.Action("Index","Home", new { area = "" })">ExampleChaper4</a>
+            @* Menu tĩnh đơn giản *@
+            <nav style="display:inline-block; margin-left:20px">
+                <ul class="nav navbar-nav">
+                    <li><a href="@Url.Action("Index","Home", new { area = "" })">Home</a></li>
+                    <li><a href="@Url.Action("About","Home", new { area = "" })">About</a></li>
+                </ul>
+            </nav>
+            @* Panel đăng nhập đơn giản (Partial tĩnh) *@
+            @Html.Partial("_LoginPanel")
+            <div class="pull-right" style="margin-top:8px">
+                <a href="@Url.Action("Set","Lang", new { lang="vi", returnUrl = Request.RawUrl ?? "/", area = "" })">VI</a> |
+                <a href="@Url.Action("Set","Lang", new { lang="en", returnUrl = Request.RawUrl ?? "/", area = "" })">EN</a> |
+                <a href="@Url.Action("Index", "Home", new { area = "Admin" })">Admin</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        @RenderBody()
+    </main>
+
+    <footer class="text-center">
+        <hr />
+        © @DateTime.Now.Year – ExampleChaper4
+    </footer>
+
+    @RenderSection("scripts", required: false)
+
+    @Scripts.Render("~/bundles/jquery")
+    @*<|vq_14967|>    @Scripts.Render("~/bundles/bootstrap")*@
+</body>
+</html>

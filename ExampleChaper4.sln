@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleChaper4", "ExampleChaper4.csproj", "{81B31F2E-D126-4350-AD1E-6B4DCE957683}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{81B31F2E-D126-4350-AD1E-6B4DCE957683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81B31F2E-D126-4350-AD1E-6B4DCE957683}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81B31F2E-D126-4350-AD1E-6B4DCE957683}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81B31F2E-D126-4350-AD1E-6B4DCE957683}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E5A59E1C-B210-4F51-909E-01C40C6E3133}
+	EndGlobalSection
+EndGlobal

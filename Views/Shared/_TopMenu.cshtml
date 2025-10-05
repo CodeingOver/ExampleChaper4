@@ -1,0 +1,9 @@
+﻿@model IEnumerable<ExampleChaper4.Controllers.MenuItem>
+<nav style="display:inline-block; margin-left:20px">
+    <ul class="nav navbar-nav">
+        @foreach (var m in Model)
+        {
+            <li><a href="@m.Url">@m.Text</a></li>
+        }
+    </ul>
+</nav>

@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = ExampleChaper4.Resources.Site.Home_Title;
+}
+<h1>@ExampleChaper4.Resources.Site.Home_Title</h1>
+<p>Demo Chapter 4: Layout, Bundles, Partial, I18n, Areas.</p>
+<p><a href="@Url.Action("About","Home")">@ExampleChaper4.Resources.Site.Menu_About</a></p>
+
+@section scripts {
+    <script>
+        console.log("Index I18n OK");
+    </script>
+}
