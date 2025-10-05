@@ -1,0 +1,306 @@
+﻿==============================================================================
+                    HƯỚNG DẪN CHI TIẾT CÁC CHỨC NĂNG ASP.NET MVC
+                              PROJECT: ExampleChaper4
+==============================================================================
+
+NỘI DUNG CHÍNH:
+1. Layout
+2. Gói tài nguyên - Bundles  
+3. PartialView
+4. Đa ngôn ngữ
+5. Phân vùng ứng dụng - Areas
+
+==============================================================================
+1. LAYOUT - KHUNG GIAO DIỆN DÙNG CHUNG
+==============================================================================
+
+1.1. @RenderBody()
+-----------------
+MỤC ĐÍCH: 
+- Định nghĩa vị trí hiển thị nội dung chính của các View con
+- Tương tự như placeholder trong template
+
+VÍ DỤ TRONG DỰ ÁN:
+File: Views\Shared\_Layout.cshtml
+```
+<main class="container">
+    @RenderBody()
+</main>
+```
+
+CÁCH HOẠT ĐỘNG:
+- Khi truy cập /Home/Index → nội dung Views\Home\Index.cshtml sẽ được render vào vị trí @RenderBody()
+- Khi truy cập /Account/Login → nội dung Views\Account\Login.cshtml sẽ được render vào vị trí @RenderBody()
+
+1.2. @RenderSection()
+--------------------
+MỤC ĐÍCH:
+- Cho phép các View con thêm nội dung vào các vùng cụ thể của Layout
+- Thường dùng cho scripts, styles riêng biệt
+
+VÍ DỤ TRONG DỰ ÁN:
+```
+@RenderSection("scripts", required: false)
+```
+
+CÁCH SỬ DỤNG:
+- Trong View con, sử dụng @section scripts { ... } để thêm JavaScript riêng
+- required: false có nghĩa section này không bắt buộc phải có
+
+1.3. @ViewBag.Property
+---------------------
+MỤC ĐÍCH:
+- Truyền dữ liệu từ Controller sang View
+- Sử dụng để set title động cho trang
+
+VÍ DỤ TRONG DỰ ÁN:
+Layout:
+```
+<title>@(ViewBag.Title ?? "ExampleChaper4") - ExampleChaper4</title>
+```
+
+View:
+```
+@{
+    ViewBag.Title = ExampleChaper4.Resources.Site.Login_Title;
+}
+```
+
+==============================================================================
+2. GÓI TÀI NGUYÊN - BUNDLES
+==============================================================================
+
+MỤC ĐÍCH:
+- Gộp và tối ưu hóa file CSS, JavaScript
+- Giảm số lượng request HTTP
+- Minify code để giảm dung lượng
+
+VÍ DỤ TRONG DỰ ÁN:
+File: App_Start\BundleConfig.cs
+
+2.1. ScriptBundle - Gộp JavaScript
+----------------------------------
+```
+bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
+    "~/Scripts/jquery-{version}.js"));
+
+bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+    "~/Scripts/bootstrap.js"));
+```
+
+2.2. StyleBundle - Gộp CSS
+--------------------------
+```
+bundles.Add(new StyleBundle("~/Content/css").Include(
+    "~/Content/bootstrap.css",
+    "~/Content/Site.css"));
+```
+
+2.3. Sử dụng trong View
+----------------------
+```
+@Styles.Render("~/Content/css")     // Render CSS bundle
+@Scripts.Render("~/bundles/jquery") // Render JavaScript bundle
+```
+
+CẤU HÌNH OPTIMIZATION:
+```
+BundleTable.EnableOptimizations = false; // Tắt trong development
+```
+
+==============================================================================
+3. PARTIALVIEW - VIEW CON
+==============================================================================
+
+MỤC ĐÍCH:
+- Tái sử dụng các thành phần giao diện
+- Tách biệt logic hiển thị
+- Dễ bảo trì và cập nhật
+
+3.1. @Html.Action()
+------------------
+VÍ DỤ TRONG DỰ ÁN:
+```
+@Html.ActionLink(ExampleChaper4.Resources.Site.Login_ReturnHome, "Index", "Home")
+```
+
+ĐẶC ĐIỂM:
+- Gọi đến Action của Controller
+- Có thể truyền parameters
+- Action có thể xử lý logic phức tạp
+
+3.2. @Html.Partial()
+-------------------
+VÍ DỤ TRONG DỰ ÁN:
+File: Views\Shared\_Layout.cshtml
+```
+@Html.Partial("_LoginPanel")
+```
+
+File: Views\Shared\_LoginPanel.cshtml
+```
+<div class="pull-right" style="display:inline-block; margin-left:15px">
+    @Html.ActionLink(ExampleChaper4.Resources.Site.Menu_Login, "Login", "Account", new { area = "" }, null)
+</div>
+```
+
+ĐẶC ĐIỂM:
+- Render trực tiếp PartialView
+- Không qua Controller Action
+- Nhanh hơn Html.Action()
+- Có thể truyền Model: @Html.Partial("_ViewName", model)
+
+SO SÁNH:
+- Html.Action(): Có thể xử lý logic → chậm hơn
+- Html.Partial(): Render trực tiếp → nhanh hơn
+
+==============================================================================
+4. ĐA NGÔN NGỮ - INTERNATIONALIZATION
+==============================================================================
+
+MỤC ĐÍCH:
+- Hỗ trợ nhiều ngôn ngữ trong ứng dụng
+- Thay đổi ngôn ngữ theo người dùng
+
+CẤU TRÚC TRONG DỰ ÁN:
+
+4.1. Resource Files
+------------------
+File: Resources\Site.Designer.cs
+- Chứa các chuỗi đa ngôn ngữ
+- Auto-generated từ file .resx
+
+VÍ DỤ:
+```
+public static string Login_Title {
+    get {
+        return ResourceManager.GetString("Login_Title", resourceCulture);
+    }
+}
+```
+
+4.2. Sử dụng trong View
+----------------------
+```
+@ExampleChaper4.Resources.Site.Login_Title
+@ExampleChaper4.Resources.Site.Menu_Home
+@ExampleChaper4.Resources.Site.Menu_About
+```
+
+4.3. Chuyển đổi ngôn ngữ
+-----------------------
+VÍ DỤ TRONG LAYOUT:
+```
+<a href="@Url.Action("Set","Lang", new { lang="vi", returnUrl = Request.RawUrl ?? "/", area = "" })">VI</a> |
+<a href="@Url.Action("Set","Lang", new { lang="en", returnUrl = Request.RawUrl ?? "/", area = "" })">EN</a>
+```
+
+CẤU TRÚC FILE RESOURCE:
+- Site.resx (default - tiếng Anh)
+- Site.vi.resx (tiếng Việt)
+- Site.en.resx (tiếng Anh)
+
+==============================================================================
+5. PHÂN VÙNG ỨNG DỤNG - AREAS
+==============================================================================
+
+MỤC ĐÍCH:
+- Tổ chức ứng dụng lớn thành các module nhỏ
+- Tách biệt Admin area với User area
+- Dễ quản lý và phát triển
+
+CẤU TRÚC TRONG DỰ ÁN:
+
+5.1. Admin Area
+--------------
+Folder: Areas\Admin\
+- Controllers\HomeController.cs
+- Views\Home\Index.cshtml
+- AdminAreaRegistration.cs
+
+5.2. Area Registration
+---------------------
+File: Areas\Admin\AdminAreaRegistration.cs
+```
+public override void RegisterArea(AreaRegistrationContext context)
+{
+    context.MapRoute(
+        "Admin_default",
+        "Admin/{controller}/{action}/{id}",
+        new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+        namespaces: new[] { "ExampleChaper4.Areas.Admin.Controllers" }
+    );
+}
+```
+
+5.3. Truy cập Area
+-----------------
+URL: /Admin/Home/Index
+Link trong View:
+```
+<a href="@Url.Action("Index", "Home", new { area = "Admin" })">Admin</a>
+```
+
+5.4. Routing Areas
+-----------------
+- Area có routing riêng biệt
+- Namespace Controllers khác nhau để tránh conflict
+- URL pattern: /{area}/{controller}/{action}/{id}
+
+==============================================================================
+TÓM TẮT CÁCH SỬ DỤNG CÁC THÀNH PHẦN
+==============================================================================
+
+1. LAYOUT:
+   - Tạo file _Layout.cshtml trong Views\Shared\
+   - Sử dụng @RenderBody() cho nội dung chính
+   - Sử dụng @RenderSection() cho các vùng tùy chọn
+
+2. BUNDLES:
+   - Cấu hình trong App_Start\BundleConfig.cs
+   - Sử dụng @Styles.Render() và @Scripts.Render() trong View
+   - Tắt optimization trong development
+
+3. PARTIALVIEW:
+   - Tạo file _TenPartialView.cshtml
+   - Sử dụng @Html.Partial() để render nhanh
+   - Sử dụng @Html.Action() khi cần xử lý logic
+
+4. ĐA NGÔN NGỮ:
+   - Tạo file .resx cho mỗi ngôn ngữ
+   - Sử dụng ExampleChaper4.Resources.Site.TenThuocTinh
+   - Tạo Controller để chuyển đổi Culture
+
+5. AREAS:
+   - Tạo folder Areas\TenArea\
+   - Tạo AreaRegistration.cs
+   - Cấu hình routing riêng biệt
+   - Sử dụng area parameter trong Url.Action()
+
+==============================================================================
+LƯU Ý QUAN TRỌNG
+==============================================================================
+
+1. Thứ tự render Scripts:
+   - Modernizr ở <head>
+   - jQuery và Bootstrap ở cuối <body>
+
+2. Bundle Optimization:
+   - Chỉ bật trong Production
+   - Debug bằng BundleTable.EnableOptimizations = false
+
+3. PartialView Naming:
+   - Bắt đầu bằng underscore (_)
+   - Đặt trong Views\Shared\ để dùng chung
+
+4. Resource Files:
+   - Build Action = Embedded Resource
+   - Custom Tool = PublicResXFileCodeGenerator
+
+5. Areas Routing:
+   - Đăng ký Areas trước default route
+   - Sử dụng namespaces để tránh conflict
+
+==============================================================================
+                                KẾT THÚC
+==============================================================================
